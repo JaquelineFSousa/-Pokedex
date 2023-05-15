@@ -6,10 +6,10 @@ Projeto Flutter
 
 Este documento descreve a implementação de uma Pokedex utilizando o framework Flutter.
 
-- A Pokedex consiste em três telas:
-1- Login 
-2- Grid com 8 pokemons
-3- Tela de informações
+ A Pokedex consiste em três telas:
+- Login 
+- Grid com 8 pokemons
+- Tela de informações
 
 Os conceitos básicos do Flutter são aplicados, incluindo a estrutura do projeto, uso de dados entre telas e implementação das telas.
 
@@ -47,4 +47,4 @@ Na tela de informações, recupere o objeto Pokemon recebido e utilize-o para ex
 
 
 
-![imagem da home](assets/images/pokemon.png)
+                              ![imagem da home](assets/images/pokemon.png)
