@@ -47,4 +47,4 @@ Na tela de informações, recupere o objeto Pokemon recebido e utilize-o para ex
 
 
 
-                              ![imagem da home](assets/images/pokemon.png)
+ ![imagem da home](assets/images/pokemon.png)
