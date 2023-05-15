@@ -1,16 +1,46 @@
-# pokedex
+# Pokedex - Flutter
 
-A new Flutter project.
+Projeto Flutter
 
-## Getting Started
+## Documentação: 
 
-This project is a starting point for a Flutter application.
+Este documento descreve a implementação de uma Pokedex utilizando o framework Flutter.
 
-A few resources to get you started if this is your first Flutter project:
+- A Pokedex consiste em três telas:
+1- Login 
+2- Grid com 8 pokemons
+3- Tela de informações
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Os conceitos básicos do Flutter são aplicados, incluindo a estrutura do projeto, uso de dados entre telas e implementação das telas.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+
+- Estrutura do Projeto:
+
+- O projeto possui a seguinte estrutura:
+
+pokedex/
+  - lib/
+       - main.dart
+       - paginas/
+            - home_page.dart
+            - pokemon_list.dart
+            - pokemon_info.dart
+
+   - lib/main.dart: Ponto de entrada do aplicativo Flutter.
+   - lib/paginas/home_page.dart: Tela de login.
+   - lib/paginas/pokemon_list.dart: Tela com uma grade de 8 pokémons.
+   - lib/paginas/pokemon_info.dart: Tela com informações detalhadas do pokemon selecionado.
+
+- Implementação:
+
+    Criação de uma tela de login, que é apenas visual.
+    Criação da tela de grid, exibindo 8 pokemons clicáveis.
+    Implementação da tela de informações, mostrando os detalhes do pokemon selecionado.
+    Uso do Navigator para navegação entre as telas.
+    Passagem de dados entre as telas, compartilhando o objeto pokemon selecionado.
+
+- Uso de Dados entre Telas:
+
+Para compartilhar os dados do pokemon selecionado entre as telas, utilize o Navigator.
+Ao clicar em um pokemon na tela de grid, navegue para a tela de informações e passe o objeto Pokemon correspondente.
+Na tela de informações, recupere o objeto Pokemon recebido e utilize-o para exibir as informações.
