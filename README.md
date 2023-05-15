@@ -44,3 +44,7 @@ pokedex/
 Para compartilhar os dados do pokemon selecionado entre as telas, utilize o Navigator.
 Ao clicar em um pokemon na tela de grid, navegue para a tela de informações e passe o objeto Pokemon correspondente.
 Na tela de informações, recupere o objeto Pokemon recebido e utilize-o para exibir as informações.
+
+
+
+!(assets/images/pokemon.png)
