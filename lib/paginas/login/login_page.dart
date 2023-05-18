@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:pokedex/paginas/home/widgets/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pokemon_list/pokemon_list.dart';
@@ -10,7 +11,6 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
-//uma classe que controla o campo de texto
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
@@ -18,13 +18,11 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    //é um método de ciclo de vida do estado que é chamado quando o estado é inicializado.
-    super
-        .initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
-    loadSavedLogin(); //ele é responsável por carregar o login salvo anteriormente.
+    super.initState();
+    loadSavedLogin();
+    checkLoginStatus(); // Verifique o status do login ao inicializar a tela
   }
 
-  // essas linhas estão usando o SharedPreferences para obter os detalhes de login salvos, como o nome, senha e o valor da opção de salvar login.
   Future<void> loadSavedLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedName = prefs.getString('name');
@@ -35,7 +33,7 @@ class _LoginPageState extends State<LoginPage> {
     print('Senha: $savedPassword');
 
     //verificam se a opção de salvar login está habilitada
-    //preenchem os campos de texto com os dados salvos anteriormente
+    //preenchem os campos de texto com os dados salvos anteriormente    
     if (saveLogin != null && saveLogin) {
       if (savedName != null) {
         _nameController.text = savedName;
@@ -46,10 +44,10 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _saveLogin = true;
       });
-      // navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
+     // navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
     }
   }
-
+  
   //para salvar ou remover os detalhes do login, dependendo da opção de salvar login estar habilitada ou não.
   Future<void> saveLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -62,7 +60,7 @@ class _LoginPageState extends State<LoginPage> {
     }
     await prefs.setBool('saveLogin', _saveLogin);
   }
-
+  
   // redirecionando o usuário para a próxima tela.
   void navigateToLoggedInScreen() {
     Navigator.of(context).pushReplacement(
@@ -70,6 +68,19 @@ class _LoginPageState extends State<LoginPage> {
         builder: (context) => const PokemonList(),
       ),
     );
+  }
+
+  // Verifique o status do login
+  void checkLoginStatus() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool? saveLogin = prefs.getBool('saveLogin');
+    if (saveLogin == null || !saveLogin) {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(
+          builder: (context) => const HomePage(),
+        ),
+      );
+    }
   }
 
   @override
@@ -117,7 +128,8 @@ class _LoginPageState extends State<LoginPage> {
                   Column(
                     children: [
                       TextField(
-                         controller: _nameController, //associando o controlador ao TextField
+                        controller:
+                            _nameController, //quando digitar no campo nome, pegar o dado e passar para salvar e retornar o login
                         style: const TextStyle(color: Colors.white),
                         decoration: InputDecoration(
                           labelText: 'name',
@@ -137,7 +149,8 @@ class _LoginPageState extends State<LoginPage> {
                     ],
                   ),
                   TextField(
-                     controller: _passwordController, //associando o controlador ao TextField
+                    controller:
+                        _passwordController, //quando digitar no campo senha, pegar o dado e passar para salvar e retornar o login
                     obscureText: true,
                     style: const TextStyle(color: Colors.white),
                     decoration: InputDecoration(
@@ -169,12 +182,12 @@ class _LoginPageState extends State<LoginPage> {
                           });
                         },
                         activeColor: Colors
-                            .green, // Define a cor quando o CheckBox está marcado
+                            .blue, // Define a cor quando o CheckBox está marcado
                         checkColor: Colors.white,
                         fillColor: MaterialStateColor.resolveWith((states) {
                           if (states.contains(MaterialState.selected)) {
                             return Colors
-                                .green; // Cor quando o CheckBox está marcado
+                                .blue; // Cor quando o CheckBox está marcado
                           } else {
                             return Colors
                                 .white; // Cor quando o CheckBox está desmarcado
