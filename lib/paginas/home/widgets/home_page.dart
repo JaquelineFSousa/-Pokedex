@@ -83,7 +83,7 @@ class HomePage extends StatelessWidget {
                           style: TextStyle(
                             color: Colors.amber,
                           ),
-                        )
+                        ),
                       ],
                     ),
                   )

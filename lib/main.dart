@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 //import 'paginas/pokemon_list/pokemon_list.dart';
 //import 'package:pokedex/paginas/pokemon_list/pokemon_list.dart';
-import 'package:pokedex/paginas/home/widgets/home_page.dart';
+//import 'package:pokedex/paginas/home/widgets/home_page.dart';
+import 'package:pokedex/paginas/login/login_page.dart';
 //import 'package:pokedex/pagina/sandbox.dart';
 
 void main() {
@@ -12,7 +13,9 @@ void main() {
 
 //inicio
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key, }) : super(key: key);
+  const MyApp({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -20,10 +23,9 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Pokedex',
       theme: ThemeData(primaryColor: Colors.blue),
-  
-       home: const HomePage(),
-     
-     
+
+      // home: const HomePage(),
+      home: const LoginPage(),
     );
   }
 }
