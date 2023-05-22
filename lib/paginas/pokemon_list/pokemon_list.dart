@@ -1,10 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/paginas/pokemon_info/pokemon_info.dart';
 
-void main() {
-  runApp(const PokemonList());
-}
-
 class PokemonFotoNome {
   static final List<Pokemon> pokemons = [
     const Pokemon(
@@ -126,11 +122,23 @@ class Pokemon {
     required this.statusNumber,
   });
 }
+class PokemonState extends StatefulWidget {
+  final String name;
 
-class PokemonList extends StatelessWidget {
-  const PokemonList({
-    Key? key,
-  }) : super(key: key);
+  const PokemonState({Key? key, required this.name}) : super(key: key);
+
+  @override
+  PokemonList createState() => PokemonList();
+}
+
+class PokemonList extends State<PokemonState> {
+late String _name;
+
+ @override
+  void initState() {
+    super.initState();
+    _name = widget.name;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -142,8 +150,8 @@ class PokemonList extends StatelessWidget {
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title: const Text(
-            'Pokedex',
+          title:  Text(
+            '$_name',
           ),
         ),
         body: Container(

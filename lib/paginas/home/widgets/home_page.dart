@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:pokedex/paginas/pokemon_list/pokemon_list.dart';
+import 'package:pokedex/paginas/login/login_page.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({Key? key, }) : super(key: key);
+  const HomePage({
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -49,7 +51,7 @@ class HomePage extends StatelessWidget {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => const PokemonList(),
+                            builder: (context) => const LoginPage(),
                           ),
                         );
                       },
@@ -96,5 +98,3 @@ class HomePage extends StatelessWidget {
     );
   }
 }
-
-

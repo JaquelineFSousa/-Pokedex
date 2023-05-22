@@ -11,18 +11,20 @@ class LoginPage extends StatefulWidget {
   _LoginPageState createState() => _LoginPageState();
 }
 
+//uma classe que controla o campo de texto.
 class _LoginPageState extends State<LoginPage> {
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  bool _saveLogin = false;
+  bool _saveLogin = true;
 
   @override
   void initState() {
-    super.initState();
-    loadSavedLogin();
-    checkLoginStatus(); // Verifique o status do login ao inicializar a tela
+    super.initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
+    loadSavedLogin(); //ele é responsável por carregar o login salvo anteriormente.
+    checkLoginStatus();
   }
 
+  // essas linhas estão usando o SharedPreferences para obter os detalhes de login salvos, como o nome, senha e o valor da opção de salvar login.
   Future<void> loadSavedLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? savedName = prefs.getString('name');
@@ -33,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
     print('Senha: $savedPassword');
 
     //verificam se a opção de salvar login está habilitada
-    //preenchem os campos de texto com os dados salvos anteriormente    
+    //preenchem os campos de texto com os dados salvos anteriormente
     if (saveLogin != null && saveLogin) {
       if (savedName != null) {
         _nameController.text = savedName;
@@ -44,10 +46,10 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _saveLogin = true;
       });
-     // navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
+      // navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
     }
   }
-  
+
   //para salvar ou remover os detalhes do login, dependendo da opção de salvar login estar habilitada ou não.
   Future<void> saveLogin() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -60,12 +62,12 @@ class _LoginPageState extends State<LoginPage> {
     }
     await prefs.setBool('saveLogin', _saveLogin);
   }
-  
+
   // redirecionando o usuário para a próxima tela.
   void navigateToLoggedInScreen() {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) => const PokemonList(),
+        builder: (context) =>  PokemonState(name: _nameController.text),
       ),
     );
   }
@@ -73,13 +75,17 @@ class _LoginPageState extends State<LoginPage> {
   // Verifique o status do login
   void checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool? saveLogin = prefs.getBool('saveLogin');
-    if (saveLogin == null || !saveLogin) {
+    //bool? saveLogin = prefs.getBool('saveLogin');
+    String? savedName = prefs.getString('name');
+    String? savedPassword = prefs.getString('password');
+    if (savedName == null || savedPassword == null) {
       Navigator.of(context).pushReplacement(
         MaterialPageRoute(
           builder: (context) => const HomePage(),
         ),
       );
+      await prefs.setString('name', 'teste');
+      await prefs.setString('password', 'teste');
     }
   }
 
