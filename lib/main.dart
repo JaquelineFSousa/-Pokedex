@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
-//import 'package:pokedex/paginas/pokemon_info/pokemon_info.dart';
 
-//import 'paginas/pokemon_list/pokemon_list.dart';
-//import 'package:pokedex/paginas/pokemon_list/pokemon_list.dart';
-//import 'package:pokedex/paginas/home/widgets/home_page.dart';
 import 'package:pokedex/paginas/login/login_page.dart';
-//import 'package:pokedex/pagina/sandbox.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -23,8 +19,6 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Pokedex',
       theme: ThemeData(primaryColor: Colors.blue),
-
-      // home: const HomePage(),
       home: const LoginPage(),
     );
   }
