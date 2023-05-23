@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:pokedex/paginas/home/widgets/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 import '../pokemon_list/pokemon_list.dart';
 
@@ -23,6 +24,31 @@ class _LoginPageState extends State<LoginPage> {
     loadSavedLogin(); //ele é responsável por carregar o login salvo anteriormente.
     checkLoginStatus();
   }
+  void loginUser() async {
+  String url = 'http://localhost:3000/auth/login';
+  String name = _nameController.text;
+  String password = _passwordController.text;
+
+  Map<String, String> body = {
+    'nome': name,
+    'senha': password,
+  };
+
+  try {
+    final response = await http.post(Uri.parse(url), body: body);
+
+    if (response.statusCode == 200) {
+      // Sucesso na chamada de API
+      saveLogin();
+      navigateToLoggedInScreen();
+    } else {
+      // Erro na chamada de API
+      print('Ops, ocorreu um erro, tente novamente mais tarde! ${response.statusCode}');
+    }
+  } catch (error) {
+    print('Ops, ocorreu um erro, tente novamente mais tarde! $error');
+  }
+}
 
   // essas linhas estão usando o SharedPreferences para obter os detalhes de login salvos, como o nome, senha e o valor da opção de salvar login.
   Future<void> loadSavedLogin() async {
@@ -46,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _saveLogin = true;
       });
-      // navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
+       navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
     }
   }
 
@@ -238,8 +264,9 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () {
-                        saveLogin();
-                        navigateToLoggedInScreen();
+                      //  saveLogin();
+                        //navigateToLoggedInScreen();
+                         loginUser();
                       },
                       child: const Text(
                         'Sign in',
