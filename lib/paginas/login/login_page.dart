@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:pokedex/paginas/home/widgets/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
-
-import '../pokemon_list/pokemon_list.dart';
+import 'dart:convert';
+import 'package:pokedex/paginas/pokemon_list/pokemon_list.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -20,35 +20,49 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    super.initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
+    super
+        .initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
     loadSavedLogin(); //ele é responsável por carregar o login salvo anteriormente.
-    checkLoginStatus();
+    checkLoginStatus(); //determinar se o usuário já está logado ou se precisa fazer login novamente.
   }
+
   void loginUser() async {
-  String url = 'http://localhost:3000/auth/login';
-  String name = _nameController.text;
-  String password = _passwordController.text;
+    String url = 'http://localhost:3000/auth/login';
+    String email = _nameController.text;
+    String password = _passwordController.text;
 
-  Map<String, String> body = {
-    'nome': name,
-    'senha': password,
-  };
+    // mapa será usado para enviar os dados do login para o servidor.
+    Map<String, dynamic> body = {
+      'email': email,
+      'senha': password,
+    };
 
-  try {
-    final response = await http.post(Uri.parse(url), body: body);
+    String bodyJson = jsonEncode(body); // Converte o mapa para uma string JSON
 
-    if (response.statusCode == 200) {
-      // Sucesso na chamada de API
-      saveLogin();
-      navigateToLoggedInScreen();
-    } else {
-      // Erro na chamada de API
-      print('Ops, ocorreu um erro, tente novamente mais tarde! ${response.statusCode}');
+    try {
+      
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Content-Type': 'application/json'
+        }, // Define o cabeçalho para indicar o tipo de conteúdo JSON
+        body: bodyJson, // Envia a string JSON como corpo da solicitação
+      );
+
+      if (response.statusCode == 201) {
+        // Sucesso na chamada de API
+        saveLogin();
+        navigateToLoggedInScreen(
+            context); //responsável por navegar para a tela principal ou tela de usuário logado após o login ser bem-sucedido.
+      } else {
+        // Erro na chamada de API
+        print('Ops, ocorreu um erro, tente novamente mais tarde!');
+      }
+    } catch (error) {
+      //Captura qualquer exceção
+      print('Ops, ocorreu um erro, tente novamente mais tarde! $error');
     }
-  } catch (error) {
-    print('Ops, ocorreu um erro, tente novamente mais tarde! $error');
   }
-}
 
   // essas linhas estão usando o SharedPreferences para obter os detalhes de login salvos, como o nome, senha e o valor da opção de salvar login.
   Future<void> loadSavedLogin() async {
@@ -72,7 +86,8 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _saveLogin = true;
       });
-       navigateToLoggedInScreen();  //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
+      navigateToLoggedInScreen(
+          context); //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
     }
   }
 
@@ -90,10 +105,12 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   // redirecionando o usuário para a próxima tela.
-  void navigateToLoggedInScreen() {
+  void navigateToLoggedInScreen(BuildContext context) {
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
-        builder: (context) =>  PokemonState(name: _nameController.text),
+        builder: (context) => PokemonState(
+          name: _nameController.text,
+        ),
       ),
     );
   }
@@ -101,11 +118,11 @@ class _LoginPageState extends State<LoginPage> {
   // Verifique o status do login
   void checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    //bool? saveLogin = prefs.getBool('saveLogin');
     String? savedName = prefs.getString('name');
     String? savedPassword = prefs.getString('password');
     if (savedName == null || savedPassword == null) {
       Navigator.of(context).pushReplacement(
+        //navegando para a página inicial e substituindo a rota atual.
         MaterialPageRoute(
           builder: (context) => const HomePage(),
         ),
@@ -118,6 +135,7 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      key: const Key('loginPage'),
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.black,
@@ -264,9 +282,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
                       onPressed: () {
-                      //  saveLogin();
-                        //navigateToLoggedInScreen();
-                         loginUser();
+                        loginUser();
                       },
                       child: const Text(
                         'Sign in',

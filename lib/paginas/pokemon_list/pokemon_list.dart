@@ -72,12 +72,7 @@ class PokemonFotoNome {
     const Pokemon(
       name: 'squirtle',
       imageUrl: 'assets/images/pokemon7.png',
-      color: Color.fromARGB(
-        255,
-        114,
-        211,
-        230,
-      ),
+      color: Color.fromARGB(255, 114, 211, 230), 
       tipo: ['Water', 'Water'],
       peso: 13.0,
       altura: 1.0,
