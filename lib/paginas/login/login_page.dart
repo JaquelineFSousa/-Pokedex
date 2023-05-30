@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously, library_private_types_in_public_api, sized_box_for_whitespace
+
 import 'package:flutter/material.dart';
 import 'package:pokedex/paginas/home/widgets/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -20,27 +22,56 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   void initState() {
-    super
-        .initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
+    super.initState(); //chama a implementação do método na classe pai, garantindo que o estado seja inicializado corretamente.
     loadSavedLogin(); //ele é responsável por carregar o login salvo anteriormente.
     checkLoginStatus(); //determinar se o usuário já está logado ou se precisa fazer login novamente.
   }
 
+  //exibir uma mensagem na tela se os dados não estiver certo.
+void exibirAlarm(BuildContext context, String mensagem) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: const Text('Erro de Login'),
+        content: Text(mensagem),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+            child: const Text('Fechar'),
+          ),
+        ],
+      );
+    },
+  );
+}
+
+  //flutter não usa localhost ele usa um IP especial.
   void loginUser() async {
-    String url = 'http://localhost:3000/auth/login';
+    String url = 'http://10.0.2.2:3000/auth/login';
     String email = _nameController.text;
     String password = _passwordController.text;
+    //validador de email 
+    RegExp emailRegex = RegExp(r'^[\w-]+(\.[\w-]+)*@([\w-]+\.)+[a-zA-Z]{2,7}$');
+   //se o email não estiver validado mostre a mensagem 
+    bool isValidEmail = emailRegex.hasMatch(email);
+  if (!isValidEmail) {
+    exibirAlarm(context, "Ops, ocorreu um erro, tente novamente mais tarde!");
+    return;
+  }
+
 
     // mapa será usado para enviar os dados do login para o servidor.
     Map<String, dynamic> body = {
       'email': email,
-      'senha': password,
+      'password': password,
     };
 
     String bodyJson = jsonEncode(body); // Converte o mapa para uma string JSON
 
     try {
-      
       final response = await http.post(
         Uri.parse(url),
         headers: {
@@ -60,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
       }
     } catch (error) {
       //Captura qualquer exceção
-      print('Ops, ocorreu um erro, tente novamente mais tarde! $error');
+      print('Ops, ocorreu um erro, tente novamente mais tarde!');
     }
   }
 
@@ -70,9 +101,6 @@ class _LoginPageState extends State<LoginPage> {
     String? savedName = prefs.getString('name');
     String? savedPassword = prefs.getString('password');
     bool? saveLogin = prefs.getBool('saveLogin');
-    print('Dados salvos:');
-    print('Nome: $savedName');
-    print('Senha: $savedPassword');
 
     //verificam se a opção de salvar login está habilitada
     //preenchem os campos de texto com os dados salvos anteriormente
@@ -86,8 +114,7 @@ class _LoginPageState extends State<LoginPage> {
       setState(() {
         _saveLogin = true;
       });
-      navigateToLoggedInScreen(
-          context); //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
+    //navigateToLoggedInScreen(context); //é chamada para navegar para a próxima tela após o login ser realizado com sucesso.
     }
   }
 
@@ -140,7 +167,7 @@ class _LoginPageState extends State<LoginPage> {
       home: Scaffold(
         backgroundColor: Colors.black,
         appBar: AppBar(
-          elevation: 0,
+         elevation: 0,
           backgroundColor: Colors.black,
           leading: IconButton(
             icon: const Icon(Icons.arrow_back),

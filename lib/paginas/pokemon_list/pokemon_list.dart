@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_interpolations
+
 import 'package:flutter/material.dart';
 import 'package:pokedex/paginas/pokemon_info/pokemon_info.dart';
 
@@ -72,7 +74,7 @@ class PokemonFotoNome {
     const Pokemon(
       name: 'squirtle',
       imageUrl: 'assets/images/pokemon7.png',
-      color: Color.fromARGB(255, 114, 211, 230), 
+      color: Color.fromARGB(255, 114, 211, 230),
       tipo: ['Water', 'Water'],
       peso: 13.0,
       altura: 1.0,
@@ -117,9 +119,9 @@ class Pokemon {
     required this.statusNumber,
   });
 }
+
 class PokemonState extends StatefulWidget {
   final String name;
-
   const PokemonState({Key? key, required this.name}) : super(key: key);
 
   @override
@@ -127,9 +129,9 @@ class PokemonState extends StatefulWidget {
 }
 
 class PokemonList extends State<PokemonState> {
-late String _name;
+  late String _name;
 
- @override
+  @override
   void initState() {
     super.initState();
     _name = widget.name;
@@ -138,6 +140,8 @@ late String _name;
   @override
   Widget build(BuildContext context) {
     const title = 'Pokedex';
+    List<String> nome = _name.split('@'); //vai dividir _name em duas partes uma nates do @ e outra depois do @
+    String apenasNome = nome[0];  //variavel vai retornar apenas a primeira parte antes do @
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
@@ -145,8 +149,8 @@ late String _name;
       home: Scaffold(
         appBar: AppBar(
           backgroundColor: Colors.red,
-          title:  Text(
-            '$_name',
+          title: Text(
+            '$apenasNome',
           ),
         ),
         body: Container(
@@ -160,8 +164,8 @@ late String _name;
               crossAxisSpacing: 16,
               mainAxisSpacing: 14,
             ),
-            itemBuilder: (BuildContext context, int index) { 
-              Pokemon pokemon = PokemonFotoNome.pokemons[index]; 
+            itemBuilder: (BuildContext context, int index) {
+              Pokemon pokemon = PokemonFotoNome.pokemons[index];
               return GestureDetector(
                 onTap: () {
                   Navigator.push(
